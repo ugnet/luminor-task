@@ -1,5 +1,5 @@
 import { HTMLAttributes, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 import { GifObject } from "../types/data";
 
@@ -9,7 +9,7 @@ import { ReactComponent as LockedIcon } from "../assets/icons/locked.svg";
 type CardProps = {
   index: number;
   isLocked?: boolean;
-  gifObject: GifObject | undefined;
+  gifObject?: GifObject;
   lockGif: (index: number, gif: GifObject) => void;
   unlockGif: (index: number) => void;
 } & HTMLAttributes<HTMLDivElement>;
@@ -38,6 +38,7 @@ const Card: React.FunctionComponent<CardProps> = ({
 
   return (
     <CardContainer onClick={handleClick} {...props}>
+      <Placeholder />
       <Border>
         <StyledImage src={gifObject.images.original.url} />
         {locked && <StyledLockedIcon id="styledLockedIcon" />}
@@ -63,7 +64,23 @@ const StyledImage = styled.img`
   height: 100%;
   width: 100%;
   object-fit: cover;
-  z-index: 0;
+`;
+
+const breatheAnimation = keyframes`
+ 0% { opacity: 0.2 }
+ 50% { opacity: 0.7 ; }
+ 100% { opacity: 0.2; }
+`;
+
+const Placeholder = styled.div`
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+
+  background-color: ${(p) => p.theme.lightGrey};
+  animation-name: ${breatheAnimation};
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
 `;
 
 const CardContainer = styled.div`
